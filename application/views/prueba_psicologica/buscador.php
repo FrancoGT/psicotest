@@ -37,10 +37,13 @@
 		const formData = new FormData(this);
 		const jsonObject = {};
 
-		for (const [key, value] of formData.entries()) 
-		{
+		for (const [key, value] of formData.entries()) {
 			jsonObject[key] = value;
 		}
+
+		// Imprimir el JSON en la consola
+		console.log("JSON a enviar:", JSON.stringify(jsonObject));
+
 		const jsonString = JSON.stringify(jsonObject);
 
 		const base_url = "<?php echo base_url(); ?>";
@@ -50,18 +53,14 @@
 		xhr.open("POST", url, true);
 		xhr.setRequestHeader("Content-Type", "application/json");
 
-		xhr.onreadystatechange = function () 
-		{
-			if (xhr.readyState === 4 && xhr.status === 200) 
-			{
+		xhr.onreadystatechange = function () {
+			if (xhr.readyState === 4 && xhr.status === 200) {
 				const response = JSON.parse(xhr.responseText);
 
 				if (response.length > 0) {
 					document.getElementById("tableContainer").style.display = "block";
 					inicializarTabla(response);
-				} 
-				else 
-				{
+				} else {
 					document.getElementById("tableContainer").style.display = "none";
 				}
 			}
@@ -69,4 +68,5 @@
 
 		xhr.send(jsonString);
 	});
+
 </script>

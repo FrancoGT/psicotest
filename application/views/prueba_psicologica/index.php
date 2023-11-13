@@ -28,6 +28,10 @@
 
 									<div class="row">
 										<div class="form-group row">
+											<input type="text" class="form-control" id="nombre" name="nombre" 
+                                                placeholder="Ingrese un nombre para buscar ...">
+										</div>
+										<div class="form-group row">
 											<label for="tipo_test">Tipo de test</label>
 											<select class="select2 form-select shadow-none" name="tipo" id="tipo">
 												<option value="">Seleccione un tipo de test</option>

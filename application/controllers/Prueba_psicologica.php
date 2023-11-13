@@ -35,12 +35,13 @@ class Prueba_psicologica extends CI_Controller
 		$data = json_decode($json, true);
 
 		// Ajustar las variables según los datos recibidos
+		$nombre = isset($data['nombre']) ? $data['nombre'] : "";
 		$tipo = isset($data['tipo']) ? $data['tipo'] : "";
 		$rango_aplicacion = isset($data['rango_aplicacion']) ? $data['rango_aplicacion'] : "";
 		$virtualizado = isset($data['virtualizado']) ? $data['virtualizado'] : "";
 
 		// Llamar al método del modelo para buscar registros
-		$info = $this->prueba_psicologica->buscar_pruebas_psicologicas($tipo, $rango_aplicacion, $virtualizado);
+		$info = $this->prueba_psicologica->buscar_pruebas_psicologicas($tipo, $rango_aplicacion, $virtualizado, $nombre);
 
 		// Devolver los resultados en formato JSON
 		echo json_encode($info);
