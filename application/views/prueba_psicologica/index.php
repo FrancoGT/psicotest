@@ -33,7 +33,7 @@
 										</div>
 										<div class="form-group row">
 											<label for="tipo_test">Tipo de test</label>
-											<select class="select2 form-select shadow-none" name="tipo" id="tipo">
+											<select class="select2 form-select shadow-none" name="tipo" id="tipo" required>
 												<option value="">Seleccione un tipo de test</option>
 												<option value="Prueba de Aptitud">Prueba de Aptitud</option>
 												<option value="Prueba de Desarrollo Infantil y Preescolar">Prueba de Desarrollo Infantil y Preescolar</option>
