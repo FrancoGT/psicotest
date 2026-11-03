@@ -10,15 +10,10 @@ class PruebaPsicologica extends BaseController
 {
     public function index(): string
     {
-        $data = [
+        return view('layout/app', [
             'nombres_apellidos' => model(UsuarioModel::class)->getFullName((int) session()->get('user_id')),
-        ];
-
-        return view('template/header')
-            . view('template/sidebar', $data)
-            . view('prueba_psicologica/index')
-            . view('template/footer')
-            . view('prueba_psicologica/buscador');
+            'seccion'           => 'pruebas',
+        ]);
     }
 
     public function buscar(): ResponseInterface

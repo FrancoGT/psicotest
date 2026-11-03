@@ -1,0 +1,150 @@
+/* PsicoTest - estilos complementarios al tema classic de Ext JS 7 */
+
+.psico-body {
+    background: #eef5f9;
+}
+
+/* ---------- Login ---------- */
+.psico-login-viewport {
+    background: #eef5f9;
+}
+
+.psico-login-panel {
+    border-top: 3px solid #6c757d !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, .08);
+    background: #fff;
+}
+
+.psico-login-logo {
+    text-align: center;
+}
+
+.psico-login-img img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+.psico-login-title {
+    font-size: 22px;
+    font-weight: 500;
+    text-align: center;
+    margin: 10px 0 15px;
+    color: #343a40;
+}
+
+.psico-alert {
+    padding: 10px 12px;
+    margin: 0 0 12px;
+    border-radius: 3px;
+    font-size: 13px;
+}
+
+.psico-alert-danger {
+    color: #721c24;
+    background: #f8d7da;
+    border: 1px solid #f5c6cb;
+}
+
+/* ---------- Barra superior ---------- */
+.psico-topbar.x-toolbar {
+    background: #1f262d;
+    border: 0;
+    padding: 0 12px;
+}
+
+.psico-brand a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.psico-brand img {
+    height: 36px;
+    margin-right: 8px;
+}
+
+.psico-brand img.psico-brand-text {
+    height: 22px;
+}
+
+.psico-user-btn.x-btn-default-toolbar-small {
+    background: transparent;
+    border-color: transparent;
+}
+
+.psico-user-btn .x-btn-inner {
+    color: #fff;
+    font-size: 13px;
+    display: inline-flex;
+    align-items: center;
+}
+
+.psico-user-btn.x-btn-over .x-btn-inner,
+.psico-user-btn.x-btn-pressed .x-btn-inner {
+    color: #1f262d;
+}
+
+.psico-avatar {
+    width: 31px;
+    height: 31px;
+    border-radius: 50%;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+/* ---------- Menú lateral ---------- */
+.psico-sidebar .x-panel-body {
+    background: #1f262d;
+    border: 0;
+}
+
+.psico-nav {
+    padding-top: 16px;
+}
+
+.psico-nav-item {
+    color: #b8c2cc;
+    padding: 13px 18px;
+    cursor: pointer;
+    font-size: 14px;
+    border-left: 3px solid transparent;
+    user-select: none;
+}
+
+.psico-nav-item-over {
+    color: #fff;
+    background: #272b34;
+}
+
+.psico-nav-item-selected {
+    color: #fff;
+    background: #27a9e3;
+    border-left-color: #fff;
+}
+
+.psico-nav-icon {
+    display: inline-block;
+    width: 22px;
+    text-align: center;
+    margin-right: 8px;
+}
+
+/* ---------- Contenido ---------- */
+.psico-card {
+    background: #fff;
+    border: 1px solid #e9ecef;
+    border-radius: 3px;
+    padding: 20px;
+}
+
+.psico-card h3 {
+    margin: 0 0 8px;
+    font-weight: 500;
+    color: #343a40;
+}
+
+.psico-card p {
+    margin: 0;
+    color: #6c757d;
+}

@@ -8,13 +8,9 @@ class Dashboard extends BaseController
 {
     public function index(): string
     {
-        $data = [
+        return view('layout/app', [
             'nombres_apellidos' => model(UsuarioModel::class)->getFullName((int) session()->get('user_id')),
-        ];
-
-        return view('template/header')
-            . view('template/sidebar', $data)
-            . view('dashboard/index')
-            . view('template/footer');
+            'seccion'           => 'dashboard',
+        ]);
     }
 }
