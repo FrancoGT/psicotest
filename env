@@ -1,68 +1,38 @@
-#--------------------------------------------------------------------
-# Example Environment Configuration file
-#
-# This file can be used as a starting point for your own
-# custom .env files, and contains most of the possible settings
-# available in a default install.
-#
-# By default, all of the settings are commented out. If you want
-# to override the setting, you must un-comment it by removing the '#'
-# at the beginning of the line.
-#--------------------------------------------------------------------
+# ============================================================
+# PSICOTEST - DESARROLLO LOCAL (CodeIgniter 4 + PostgreSQL)
+# ============================================================
 
-#--------------------------------------------------------------------
-# ENVIRONMENT
-#--------------------------------------------------------------------
+# Entorno de CodeIgniter
+CI_ENVIRONMENT=development
 
-# CI_ENVIRONMENT = development
+# URL publica de la aplicacion
+app.baseURL='http://localhost:8080/'
+app.forceGlobalSecureRequests=false
 
-#--------------------------------------------------------------------
-# APP
-#--------------------------------------------------------------------
+# Variables leidas por Docker Compose
+DB_HOST=db
+DB_DATABASE=psicotest
+DB_USERNAME=postgres
+DB_PASSWORD=postgres
+DB_PORT=5432
 
-# app.baseURL = 'http://localhost:8080/'
-# If you have trouble with `.`, you could also use `_`.
-# app_baseURL = ''
-# app.forceGlobalSecureRequests = false
-# app.CSPEnabled = false
+# Variables habituales para el contenedor PostgreSQL
+POSTGRES_DB=psicotest
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres
 
-#--------------------------------------------------------------------
-# DATABASE
-#--------------------------------------------------------------------
+# Conexion CodeIgniter -> PostgreSQL por red interna de Docker
+# El hostname "db" corresponde al servicio "db" de docker-compose.yml
+# Si ejecutas PHP fuera de Docker, sustituye "db" por "localhost".
+database.default.hostname=db
+database.default.database=psicotest
+database.default.username=postgres
+database.default.password=<tu_contraseña_postgres>
+database.default.DBDriver=Postgre
+database.default.DBPrefix=
+database.default.port=5432
 
-# database.default.hostname = localhost
-# database.default.database = psicotest
-# database.default.username = postgres
-# database.default.password =
-# database.default.DBDriver = Postgre
-# database.default.DBPrefix =
-# database.default.port = 5432
+database.default.charset=utf8
 
-# If you use Postgre as tests, first update the values of Config\Database::$tests.
-# database.tests.hostname = localhost
-# database.tests.database = psicotest_test
-# database.tests.username = postgres
-# database.tests.password =
-# database.tests.DBDriver = Postgre
-# database.tests.DBPrefix =
-# database.tests.charset = utf8
-# database.tests.port = 5432
-
-#--------------------------------------------------------------------
-# ENCRYPTION
-#--------------------------------------------------------------------
-
-# encryption.key =
-
-#--------------------------------------------------------------------
-# SESSION
-#--------------------------------------------------------------------
-
-# session.driver = 'CodeIgniter\Session\Handlers\FileHandler'
-# session.savePath = null
-
-#--------------------------------------------------------------------
-# LOGGER
-#--------------------------------------------------------------------
-
-# logger.threshold = 4
+# Mensajes de log detallados para desarrollo
+logger.threshold=4
