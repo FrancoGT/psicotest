@@ -1,25 +1,50 @@
 .DS_Store
+.env
 
-application/cache/*
-!application/cache/index.html
+#-------------------------
+# Writable (CodeIgniter 4)
+#-------------------------
+writable/cache/*
+!writable/cache/index.html
 
-application/logs/*
-!application/logs/index.html
+writable/logs/*
+!writable/logs/index.html
 
-!application/*/.htaccess
+writable/session/*
+!writable/session/index.html
 
+writable/uploads/*
+!writable/uploads/index.html
+
+writable/debugbar/*
+!writable/debugbar/index.html
+
+writable/**/*.db
+writable/**/*.sqlite
+
+php_errors.log
+
+#-------------------------
+# Composer
+#-------------------------
+/vendor/
 composer.lock
 
-user_guide_src/build/*
-user_guide_src/cilexer/build/*
-user_guide_src/cilexer/dist/*
-user_guide_src/cilexer/pycilexer.egg-info/*
-/vendor/
+#-------------------------
+# Tests
+#-------------------------
+/build/
+/phpunit*.xml
+!/phpunit.dist.xml
+/.phpunit.*.cache
+/.phpunit.cache
 
+#-------------------------
 # IDE Files
 #-------------------------
 /nbproject/
 .idea/*
+.vscode/
 
 ## Sublime Text cache files
 *.tmlanguage.cache
@@ -27,5 +52,3 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 *.stTheme.cache
 *.sublime-workspace
 *.sublime-project
-/tests/tests/
-/tests/results/

@@ -1,3 +1,71 @@
+# PsicoTest
+
+Buscador de pruebas psicológicas construido con **CodeIgniter 4.7.6** sobre **PHP 8.4.27** y **PostgreSQL**.
+
+### Requisitos
+
+- PHP `^8.4.27` con las extensiones `intl`, `mbstring` y `pgsql`
+- PostgreSQL
+
+### Instalación
+
+1. Copiar `env` a `.env` y ajustar como mínimo:
+
+   ```ini
+   CI_ENVIRONMENT = development
+   app.baseURL = 'http://localhost:8080/'
+
+   database.default.hostname = localhost
+   database.default.database = psicotest
+   database.default.username = postgres
+   database.default.password = tu_password
+   database.default.DBDriver = Postgre
+   database.default.port = 5432
+   ```
+
+2. Crear la base de datos `psicotest` y ejecutar el esquema de abajo.
+3. Levantar el servidor de desarrollo:
+
+   ```bash
+   php spark serve
+   ```
+
+   En Apache/Nginx el *document root* debe apuntar a la carpeta `public/`.
+
+### Docker
+
+La imagen usa `php:8.4.27-apache` (extensiones `intl`, `pgsql`, `opcache`), CodeIgniter 4.7.6 y
+PostgreSQL 17. El esquema de `docker/postgres/01-schema.sql` se carga automáticamente la primera
+vez que se crea el volumen de la base de datos.
+
+```bash
+# Contraseña de la BD (obligatoria). También puede ir en un archivo de entorno.
+export DB_PASSWORD=una_password_segura
+
+docker compose up -d --build
+# http://localhost:8080
+```
+
+Variables opcionales: `DB_DATABASE`, `DB_USERNAME`, `APP_BASE_URL`, `CI_ENVIRONMENT`
+(por defecto `production`). Para borrar los datos y volver a cargar el esquema:
+`docker compose down -v`.
+
+### Estructura
+
+| Ruta | Descripción |
+|------|-------------|
+| `app/Controllers` | `Login`, `Logout`, `Dashboard`, `PruebaPsicologica` |
+| `app/Models` | `UsuarioModel`, `PruebasPsicologicasModel` |
+| `app/Filters/AuthFilter.php` | Protege las rutas que requieren sesión |
+| `app/Config/Routes.php` | Definición de rutas |
+| `public/assets`, `public/dist` | Recursos estáticos (Matrix Admin) |
+| `src/scss` | Fuentes SCSS de la plantilla |
+
+### Contraseñas
+
+Las contraseñas se almacenan con `password_hash()` usando **Argon2id** (o bcrypt si el servidor
+no soporta Argon2). Si la base de datos aún tiene contraseñas en MD5, se aceptan y se reemplazan
+automáticamente por un hash Argon2id la próxima vez que el usuario inicie sesión correctamente.
 
 ### Esquema inicial de base de datos:
 
@@ -34,7 +102,8 @@ VALUES (
     1,
     'Ramiro Lara',
     'ramiro_lara',
-    '21232f297a57a5a743894a0e4a801fc3',
+    -- contraseña: admin (hash Argon2id)
+    '$argon2id$v=19$m=65536,t=4,p=1$ajZLcHBUY0xVN204cjdiWg$TcALG9iRg13eNet7Ankyu1V3LPIShFSKtxtM1xGPqZo',
     1,
     1
 );
