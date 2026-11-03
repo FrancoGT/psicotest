@@ -38,6 +38,7 @@
 
         title: 'Página Principal',
         bodyPadding: 20,
+        bodyCls: 'psico-page-body',
         scrollable: true,
 
         initComponent: function () {
@@ -65,6 +66,7 @@
         },
         bodyPadding: 15,
         scrollable: 'y',
+        bodyCls: 'psico-page-body',
 
         initComponent: function () {
             var me = this;
@@ -88,13 +90,12 @@
                 ui: 'default',
                 bodyPadding: 15,
                 margin: '0 0 15 0',
-                layout: {
-                    type: 'column'
-                },
+                // Distribución fluida con CSS Grid (ver .psico-form-grid en psicotest.css):
+                // las columnas se reorganizan solas según el ancho disponible.
+                layout: 'auto',
+                bodyCls: 'psico-form-grid',
                 defaults: {
                     labelAlign: 'top',
-                    columnWidth: 0.5,
-                    padding: '0 10 5 0',
                     msgTarget: 'under'
                 },
                 items: [{
@@ -102,7 +103,7 @@
                     name: 'nombre',
                     fieldLabel: 'Nombre',
                     emptyText: 'Ingrese un nombre para buscar ...',
-                    columnWidth: 1,
+                    cls: 'psico-span-full',
                     listeners: {
                         specialkey: function (f, e) {
                             if (e.getKey() === e.ENTER) {
@@ -148,7 +149,7 @@
                 }, {
                     xtype: 'radiogroup',
                     fieldLabel: 'Test Virtualizado',
-                    columnWidth: 1,
+                    cls: 'psico-span-full psico-fit-content',
                     columns: 2,
                     width: 260,
                     items: [
@@ -210,11 +211,15 @@
                     align: 'center',
                     renderer: Ext.util.Format.htmlEncode
                 }],
+                // Con muchas columnas, los minWidth de cada columna fuerzan el
+                // desplazamiento horizontal dentro de la propia tabla en lugar de comprimirla.
                 tbar: [{
                     xtype: 'textfield',
                     itemId: 'filtroLocal',
                     emptyText: 'Filtrar resultados...',
-                    width: 260,
+                    flex: 1,
+                    minWidth: 140,
+                    maxWidth: 300,
                     triggers: {
                         limpiar: {
                             cls: 'x-form-clear-trigger',
@@ -230,7 +235,9 @@
                 }],
                 bbar: {
                     xtype: 'pagingtoolbar',
-                    displayInfo: true
+                    displayInfo: true,
+                    // En pantallas estrechas los controles quedan accesibles con flechas
+                    overflowHandler: 'scroller'
                 }
             }];
 
@@ -326,24 +333,63 @@
     /* ------------------------------------------------------------------
      * Contenedor principal
      * ------------------------------------------------------------------ */
+    var BREAKPOINT_MOVIL = 768,
+        BREAKPOINT_TABLET = 1024;
+
+    function calcularModo() {
+        var w = Ext.Element.getViewportWidth();
+
+        return w < BREAKPOINT_MOVIL ? 'movil' : (w < BREAKPOINT_TABLET ? 'tablet' : 'escritorio');
+    }
+
     Ext.define('PsicoTest.view.Main', {
         extend: 'Ext.container.Viewport',
 
         layout: 'border',
+        cls: 'psico-app',
 
         initComponent: function () {
-            var me = this;
+            var me = this,
+                modo = calcularModo(),
+                movil = modo === 'movil';
+
+            me.modo = modo;
+
+            // Un único store alimenta el menú lateral y el menú desplegable móvil.
+            me.navStore = Ext.create('Ext.data.Store', {
+                fields: ['id', 'texto', 'icono', 'separado'],
+                data: [
+                    { id: 'dashboard', texto: 'Principal', icono: 'fa-home' },
+                    { id: 'pruebas', texto: 'Pruebas Psicológicas', icono: 'fa-clipboard-list' },
+                    { id: 'logout', texto: 'Cerrar Sesión', icono: 'fa-sign-out-alt', separado: true }
+                ]
+            });
 
             me.items = [{
                 region: 'north',
                 xtype: 'toolbar',
+                itemId: 'topbar',
                 cls: 'psico-topbar',
-                height: 64,
+                height: 60,
                 items: [{
+                    xtype: 'button',
+                    itemId: 'btnMenu',
+                    cls: 'psico-hamburger',
+                    iconCls: 'fas fa-bars',
+                    tooltip: 'Menú',
+                    ariaLabel: 'Abrir menú de navegación',
+                    hidden: !movil,
+                    handler: function () { me.alternarMenu(); }
+                }, {
                     xtype: 'component',
                     cls: 'psico-brand',
                     html: '<a href="' + cfg.siteUrl + RUTAS.dashboard + '">' +
-                        '<img src="' + cfg.baseUrl + 'assets/images/logo-icon.png" alt="PsicoTest">' +
+                        '<svg class="psico-brand-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="PsicoTest">' +
+                            '<path d="M11 22H5.5a1 1 0 0 1 0-5h4.501"/>' +
+                            '<path d="m21 22-1.879-1.878"/>' +
+                            '<path d="M3 19.5v-15A2.5 2.5 0 0 1 5.5 2H18a1 1 0 0 1 1 1v8"/>' +
+                            '<circle cx="17" cy="18" r="3"/>' +
+                        '</svg>' +
                         '<img src="' + cfg.baseUrl + 'assets/images/logo-text-light.png" alt="PsicoTest" class="psico-brand-text">' +
                         '</a>',
                     listeners: {
@@ -354,63 +400,51 @@
                             fn: function () { me.irA('dashboard'); }
                         }
                     }
-                }, '->', {
+                }, {
+                    xtype: 'component',
+                    itemId: 'sepTitulo',
+                    cls: 'psico-topbar-sep',
+                    hidden: movil
+                }, {
+                    // flex + minWidth 0: el título ocupa el espacio libre y pasa a
+                    // dos líneas en lugar de desbordar el header.
+                    xtype: 'component',
+                    cls: 'psico-topbar-title',
+                    flex: 1,
+                    minWidth: 0,
+                    html: 'Sistema de Pruebas Psicológicas'
+                }, {
                     xtype: 'button',
                     cls: 'psico-user-btn',
+                    tooltip: Ext.String.htmlEncode(cfg.usuario || ''),
                     text: '<img src="' + cfg.baseUrl + 'assets/images/users/1.jpg" alt="" class="psico-avatar">' +
-                        Ext.String.htmlEncode(cfg.usuario || ''),
+                        '<span class="psico-user-name">' + Ext.String.htmlEncode(cfg.usuario || '') + '</span>',
                     menu: [{
                         text: 'Cerrar Sesión',
+                        iconCls: 'fas fa-sign-out-alt',
                         handler: function () { me.cerrarSesion(); }
                     }]
                 }]
             }, {
                 region: 'west',
                 xtype: 'panel',
+                itemId: 'sidebar',
                 cls: 'psico-sidebar',
-                width: 230,
+                width: modo === 'tablet' ? 200 : 240,
+                minWidth: 180,
+                maxWidth: 320,
                 split: true,
                 collapsible: true,
                 collapseMode: 'mini',
                 header: false,
-                collapsed: Ext.Element.getViewportWidth() < 768,
-                items: [{
-                    xtype: 'dataview',
-                    itemId: 'nav',
-                    cls: 'psico-nav',
-                    itemSelector: 'div.psico-nav-item',
-                    selectedItemCls: 'psico-nav-item-selected',
-                    overItemCls: 'psico-nav-item-over',
-                    singleSelect: true,
-                    tpl: [
-                        '<tpl for=".">',
-                        '<div class="psico-nav-item">',
-                        '<span class="psico-nav-icon">{icono}</span>{texto}',
-                        '</div>',
-                        '</tpl>'
-                    ],
-                    store: {
-                        fields: ['id', 'texto', 'icono'],
-                        data: [
-                            { id: 'dashboard', texto: 'Principal', icono: '&#9632;' },
-                            { id: 'pruebas', texto: 'Pruebas Psicológicas', icono: '&#9776;' },
-                            { id: 'logout', texto: 'Cerrar Sesión', icono: '&#9099;' }
-                        ]
-                    },
-                    listeners: {
-                        itemclick: function (view, rec) {
-                            if (rec.getId() === 'logout') {
-                                me.cerrarSesion();
-                                return false;
-                            }
-                            me.irA(rec.getId());
-                        }
-                    }
-                }]
+                hidden: movil,
+                scrollable: 'y',
+                items: [me.crearNav('nav')]
             }, {
                 region: 'center',
                 xtype: 'container',
                 itemId: 'contenido',
+                cls: 'psico-content',
                 layout: 'card',
                 items: [
                     { xtype: 'psico-dashboard', itemId: 'dashboard' },
@@ -419,6 +453,120 @@
             }];
 
             me.callParent();
+
+            // Menú lateral desplegable para móviles (se superpone al contenido).
+            me.drawer = Ext.create('Ext.panel.Panel', {
+                floating: true,
+                shadow: false,
+                hidden: true,
+                header: false,
+                border: false,
+                cls: 'psico-sidebar psico-drawer',
+                scrollable: 'y',
+                items: [me.crearNav('navMovil')]
+            });
+
+            me.drawerMask = Ext.getBody().createChild({ cls: 'psico-drawer-mask' });
+            me.drawerMask.on('click', me.cerrarMenu, me);
+
+            Ext.on('resize', me.aplicarModo, me, { buffer: 60 });
+        },
+
+        crearNav: function (itemId) {
+            var me = this;
+
+            return {
+                xtype: 'dataview',
+                itemId: itemId,
+                cls: 'psico-nav',
+                itemSelector: 'div.psico-nav-item',
+                selectedItemCls: 'psico-nav-item-selected',
+                overItemCls: 'psico-nav-item-over',
+                singleSelect: true,
+                tpl: [
+                    '<div class="psico-nav-section">Navegación</div>',
+                    '<tpl for=".">',
+                    '<tpl if="separado"><div class="psico-nav-divider"></div></tpl>',
+                    '<div class="psico-nav-item">',
+                    '<i class="psico-nav-icon fas {icono}"></i><span class="psico-nav-text">{texto}</span>',
+                    '</div>',
+                    '</tpl>'
+                ],
+                store: me.navStore,
+                listeners: {
+                    itemclick: function (view, rec) {
+                        if (rec.getId() === 'logout') {
+                            me.cerrarSesion();
+                            return false;
+                        }
+                        me.irA(rec.getId());
+                    }
+                }
+            };
+        },
+
+        /**
+         * Ajusta header y menú lateral al pasar entre escritorio, tablet y móvil.
+         */
+        aplicarModo: function () {
+            var me = this,
+                modo = calcularModo(),
+                movil = modo === 'movil',
+                sidebar = me.down('#sidebar');
+
+            if (modo === me.modo) {
+                if (movil && me.drawer.isVisible()) {
+                    me.posicionarMenu();
+                }
+                return;
+            }
+
+            me.modo = modo;
+
+            Ext.suspendLayouts();
+            me.down('#btnMenu').setHidden(!movil);
+            me.down('#sepTitulo').setHidden(movil);
+            sidebar.setHidden(movil);
+            if (!movil) {
+                sidebar.setWidth(modo === 'tablet' ? 200 : 240);
+            }
+            Ext.resumeLayouts(true);
+
+            if (!movil) {
+                me.cerrarMenu();
+            }
+        },
+
+        posicionarMenu: function () {
+            var top = this.down('#topbar').getHeight(),
+                ancho = Math.min(260, Math.round(Ext.Element.getViewportWidth() * 0.85)),
+                zIndex;
+
+            this.drawer.setSize(ancho, Ext.Element.getViewportHeight() - top);
+            this.drawer.showAt(0, top);
+
+            zIndex = parseInt(this.drawer.el.getStyle('z-index'), 10) || 19000;
+            this.drawerMask.setStyle({ top: top + 'px', zIndex: zIndex - 1 });
+        },
+
+        abrirMenu: function () {
+            this.posicionarMenu();
+            Ext.getBody().addCls('psico-drawer-open');
+        },
+
+        cerrarMenu: function () {
+            if (this.drawer && this.drawer.isVisible()) {
+                this.drawer.hide();
+            }
+            Ext.getBody().removeCls('psico-drawer-open');
+        },
+
+        alternarMenu: function () {
+            if (this.drawer.isVisible()) {
+                this.cerrarMenu();
+            } else {
+                this.abrirMenu();
+            }
         },
 
         /**
@@ -429,10 +577,13 @@
                 seccion = 'dashboard';
             }
 
-            var nav = this.down('#nav');
+            var rec = this.navStore.getById(seccion);
 
             this.down('#contenido').getLayout().setActiveItem(seccion);
-            nav.getSelectionModel().select(nav.getStore().getById(seccion), false, true);
+            [this.down('#nav'), this.drawer.down('#navMovil')].forEach(function (nav) {
+                nav.getSelectionModel().select(rec, false, true);
+            });
+            this.cerrarMenu();
 
             if (!desdeHistorial && window.history && window.history.pushState) {
                 window.history.pushState({ seccion: seccion }, '', cfg.siteUrl + RUTAS[seccion]);

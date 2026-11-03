@@ -58,6 +58,23 @@ Ext.onReady(function () {
         });
     }
 
+    var LOGIN_APILADO = 640;
+
+    function ajustarLogin() {
+        var panel = Ext.getCmp('loginPanel'),
+            apilar = Ext.Element.getViewportWidth() < LOGIN_APILADO,
+            layout = panel.getLayout();
+
+        if (panel.apilado !== apilar) {
+            panel.apilado = apilar;
+            layout.setVertical(apilar);
+            panel.toggleCls('psico-login-stacked', apilar);
+            panel.updateLayout();
+        }
+    }
+
+    Ext.on('resize', function () { ajustarLogin(); }, null, { buffer: 60 });
+
     var alPresionarEnter = function (field, e) {
         if (e.getKey() === e.ENTER) {
             enviar();
@@ -84,11 +101,21 @@ Ext.onReady(function () {
                 listeners: { afterrender: relayoutAlCargar }
             }, {
                 xtype: 'panel',
+                id: 'loginPanel',
                 cls: 'psico-login-panel',
                 border: true,
+                // Imagen y formulario lado a lado; en pantallas estrechas se apilan
+                // (ver ajustarLogin) para que el formulario no quede aplastado.
                 layout: {
-                    type: 'hbox',
-                    align: 'middle'
+                    type: 'box',
+                    vertical: Ext.Element.getViewportWidth() < LOGIN_APILADO,
+                    align: 'stretch'
+                },
+                listeners: {
+                    afterrender: function (panel) {
+                        panel.apilado = panel.getLayout().getVertical();
+                        panel.toggleCls('psico-login-stacked', panel.apilado);
+                    }
                 },
                 items: [{
                     xtype: 'component',
@@ -133,6 +160,7 @@ Ext.onReady(function () {
                         emptyText: 'Contraseña',
                         blankText: 'Contraseña debe ser ingresado!!!'
                     }],
+                    buttonAlign: 'center',
                     buttons: [{
                         text: 'Entrar',
                         scale: 'medium',

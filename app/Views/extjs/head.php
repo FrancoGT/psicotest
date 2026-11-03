@@ -18,10 +18,11 @@ $config = array_merge([
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noindex,nofollow">
     <title><?= esc($titulo ?? 'PsicoTest') ?></title>
-    <link rel="icon" type="image/png" sizes="16x16" href="<?= base_url('assets/images/favicon.png') ?>">
+    <link rel="icon" type="image/x-icon" href="<?= base_url('favicon.ico') ?>">
 
     <!-- Ext JS 7 - tema classic -->
     <link rel="stylesheet" href="<?= base_url('assets/extjs7/classic/theme-classic/resources/theme-classic-all.css') ?>">
+    <link rel="stylesheet" href="<?= base_url('dist/css/icons/font-awesome/css/fontawesome-all.min.css') ?>">
     <link rel="stylesheet" href="<?= base_url('assets/psicotest/css/psicotest.css') ?>">
 
     <script>

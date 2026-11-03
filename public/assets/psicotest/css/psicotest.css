@@ -1,7 +1,7 @@
 /* PsicoTest - estilos complementarios al tema classic de Ext JS 7 */
 
 .psico-body {
-    background: #eef5f9;
+    background: #F8FAFC;
 }
 
 /* ---------- Login ---------- */
@@ -46,11 +46,46 @@
     border: 1px solid #f5c6cb;
 }
 
-/* ---------- Barra superior ---------- */
+/* ---------- Paleta institucional ---------- */
+:root {
+    /* Header: azul clásico de Ext JS */
+    --psico-header-top: #4D91DF;
+    --psico-header-bottom: #1254AC;
+    --psico-header-border: #0E4690;
+    --psico-header-text: #FFFFFF;
+
+    /* Sidebar */
+    --psico-side-bg: #E3EBF7;
+    --psico-side-heading: #C7D9F0;
+    --psico-side-selected: #D2E3F8;
+    --psico-side-hover: #B8D1F0;
+    --psico-side-border: #A5BFE0;
+    --psico-side-text: #234A75;
+
+    /* Contenido (sin cambios) */
+    --psico-content-title: #1E3A5F;
+    --psico-body: #F8FAFC;
+    --psico-panel: #FFFFFF;
+    --psico-table-head: #DBEAFE;
+    --psico-border: #E2E8F0;
+    --psico-text: #1E293B;
+    --psico-muted: #64748B;
+}
+
+.psico-app,
+.psico-app .x-panel-body-default {
+    font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* ---------- Header (azul clásico Ext JS) ---------- */
 .psico-topbar.x-toolbar {
-    background: #1f262d;
+    background-color: var(--psico-header-bottom);
+    background-image: linear-gradient(to bottom, var(--psico-header-top) 0%, var(--psico-header-bottom) 100%);
     border: 0;
+    border-bottom: 1px solid var(--psico-header-border);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .25);
     padding: 0 12px;
+    z-index: 2;
 }
 
 .psico-brand a {
@@ -60,91 +95,395 @@
 }
 
 .psico-brand img {
-    height: 36px;
-    margin-right: 8px;
+    display: block;
+    height: 34px;
+    margin-right: 10px;
 }
 
 .psico-brand img.psico-brand-text {
-    height: 22px;
+    height: 20px;
 }
 
-.psico-user-btn.x-btn-default-toolbar-small {
+.psico-brand .psico-brand-icon {
+    display: block;
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    margin-right: 10px;
+    color: var(--psico-header-text);
+}
+
+.psico-topbar-sep {
+    width: 1px;
+    height: 28px;
+    margin: 0 14px 0 4px;
+    background: rgba(255, 255, 255, .35);
+    box-shadow: 1px 0 0 rgba(0, 0, 0, .12);
+}
+
+.psico-topbar-title {
+    color: var(--psico-header-text);
+    font-family: tahoma, arial, verdana, sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    line-height: 1.3;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, .25);
+    text-align: center;
+    /* Se permite el salto de línea en lugar de recortar el nombre del sistema */
+    white-space: normal;
+    overflow-wrap: break-word;
+    min-width: 0;
+}
+
+/* Botones del header (usuario y hamburguesa) */
+.psico-topbar .psico-user-btn.x-btn-default-toolbar-small,
+.psico-topbar .psico-hamburger.x-btn-default-toolbar-small {
     background: transparent;
+    background-image: none;
     border-color: transparent;
+    border-radius: 3px;
+    padding: 4px 8px;
+}
+
+.psico-topbar .psico-user-btn.x-btn-over,
+.psico-topbar .psico-user-btn.x-btn-pressed,
+.psico-topbar .psico-user-btn.x-btn-menu-active,
+.psico-topbar .psico-hamburger.x-btn-over,
+.psico-topbar .psico-hamburger.x-btn-pressed {
+    background: rgba(255, 255, 255, .18) !important;
+    background-image: none !important;
+    border-color: rgba(255, 255, 255, .45) !important;
 }
 
 .psico-user-btn .x-btn-inner {
-    color: #fff;
-    font-size: 13px;
+    color: var(--psico-header-text) !important;
+    font-family: tahoma, arial, verdana, sans-serif;
+    font-size: 12px;
+    font-weight: bold;
     display: inline-flex;
     align-items: center;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, .25);
 }
 
-.psico-user-btn.x-btn-over .x-btn-inner,
-.psico-user-btn.x-btn-pressed .x-btn-inner {
-    color: #1f262d;
+/* Flecha del menú del usuario en blanco */
+.psico-user-btn .x-btn-wrap:after,
+.psico-user-btn .x-btn-arrow-right:after {
+    filter: brightness(0) invert(1);
+}
+
+.psico-hamburger .x-btn-icon-el {
+    color: var(--psico-header-text) !important;
+    font-size: 18px !important;
 }
 
 .psico-avatar {
-    width: 31px;
-    height: 31px;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
-    margin-right: 8px;
+    margin-right: 10px;
     vertical-align: middle;
+    border: 1px solid rgba(255, 255, 255, .7);
 }
 
-/* ---------- Menú lateral ---------- */
+/* ---------- Sidebar (tema classic) ---------- */
+.psico-sidebar,
 .psico-sidebar .x-panel-body {
-    background: #1f262d;
+    background: var(--psico-side-bg);
     border: 0;
 }
 
+.psico-sidebar {
+    border-right: 1px solid var(--psico-side-border);
+}
+
 .psico-nav {
-    padding-top: 16px;
+    padding: 6px 5px;
+    font-family: tahoma, arial, verdana, sans-serif;
+    color: var(--psico-side-text);
+}
+
+.psico-nav-section {
+    color: var(--psico-side-text);
+    font-size: 11px;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 4px 8px;
+    margin-bottom: 4px;
+    background-color: var(--psico-side-heading);
+    background-image: linear-gradient(to bottom, #D5E3F4 0%, var(--psico-side-heading) 100%);
+    border: 1px solid var(--psico-side-border);
+    border-radius: 2px;
+}
+
+.psico-nav-divider {
+    height: 1px;
+    margin: 5px 3px;
+    background: var(--psico-side-border);
 }
 
 .psico-nav-item {
-    color: #b8c2cc;
-    padding: 13px 18px;
+    display: flex;
+    align-items: center;
+    color: var(--psico-side-text);
+    padding: 5px 8px;
+    margin-bottom: 1px;
     cursor: pointer;
-    font-size: 14px;
-    border-left: 3px solid transparent;
+    font-size: 12px;
+    line-height: 16px;
+    border: 1px solid transparent;
+    border-radius: 2px;
     user-select: none;
 }
 
-.psico-nav-item-over {
-    color: #fff;
-    background: #272b34;
+.psico-nav-text {
+    min-width: 0;
+    overflow-wrap: break-word;
 }
 
 .psico-nav-item-selected {
-    color: #fff;
-    background: #27a9e3;
-    border-left-color: #fff;
+    background: var(--psico-side-selected);
+    border-color: var(--psico-side-border);
+    font-weight: bold;
+}
+
+.psico-nav-item-over,
+.psico-nav-item-selected.psico-nav-item-over {
+    background: var(--psico-side-hover);
+    border-color: var(--psico-side-border);
 }
 
 .psico-nav-icon {
-    display: inline-block;
-    width: 22px;
+    flex: 0 0 18px;
     text-align: center;
     margin-right: 8px;
+    color: var(--psico-side-text);
+}
+
+/* Divisor redimensionable entre sidebar y contenido */
+.psico-app .x-splitter {
+    background: var(--psico-side-bg);
+}
+
+/* Menú lateral desplegable (móviles) */
+.psico-drawer {
+    border-right: 1px solid var(--psico-side-border);
+    box-shadow: 2px 0 8px rgba(18, 84, 172, .25);
+}
+
+.psico-drawer-mask {
+    display: none;
+    position: fixed;
+    top: 60px;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(18, 40, 75, .35);
+}
+
+.psico-drawer-open .psico-drawer-mask {
+    display: block;
+}
+
+/* ---------- Área de contenido ---------- */
+.psico-app .x-border-layout-ct,
+.psico-content {
+    background: var(--psico-body);
+}
+
+.psico-content .x-panel-body-default {
+    border-color: var(--psico-border);
+    color: var(--psico-text);
+}
+
+.psico-content .x-panel-body.psico-page-body {
+    background: var(--psico-body);
+}
+
+.psico-content .x-panel-default {
+    border-color: var(--psico-border);
+}
+
+/* Encabezados de panel: blancos y sobrios */
+.psico-content .x-panel-header-default {
+    background: var(--psico-panel);
+    background-image: none;
+    border-color: var(--psico-border);
+    padding: 10px 14px;
+}
+
+.psico-content .x-panel-header-title-default > .x-title-text-default {
+    color: var(--psico-content-title);
+    font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 20px;
+}
+
+/* Barras de herramientas de grids */
+.psico-content .x-toolbar-default {
+    background: var(--psico-panel);
+    background-image: none;
+    border-color: var(--psico-border);
+}
+
+/* Encabezados de tablas */
+.psico-content .x-column-header {
+    background: var(--psico-table-head);
+    background-image: none;
+    border-right-color: #BFDBFE;
+    color: var(--psico-content-title);
+    font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.psico-content .x-grid-header-ct {
+    border-color: #BFDBFE;
+    background: var(--psico-table-head);
+}
+
+.psico-content .x-column-header-over {
+    background: #BFDBFE;
+    background-image: none;
 }
 
 /* ---------- Contenido ---------- */
 .psico-card {
     background: #fff;
-    border: 1px solid #e9ecef;
-    border-radius: 3px;
+    border: 1px solid #E2E8F0;
+    border-left: 4px solid #2563EB;
+    border-radius: 6px;
     padding: 20px;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, .06);
 }
 
 .psico-card h3 {
     margin: 0 0 8px;
-    font-weight: 500;
-    color: #343a40;
+    font-weight: 600;
+    color: #1E3A5F;
 }
 
 .psico-card p {
     margin: 0;
-    color: #6c757d;
+    color: #64748B;
+}
+
+/* =====================================================================
+ * Responsive
+ * ===================================================================== */
+
+/* Títulos de panel y etiquetas: saltan de línea en lugar de mostrar "..." */
+.psico-content .x-panel-header-title-default > .x-title-text-default {
+    white-space: normal;
+    text-overflow: clip;
+    overflow-wrap: break-word;
+}
+
+.psico-content .x-form-item-label-inner {
+    white-space: normal;
+    overflow-wrap: break-word;
+}
+
+/* Formulario de búsqueda: CSS Grid fluido.
+ * Ext JS renderiza los campos (layout 'auto') dentro de outerCt > innerCt;
+ * innerCt pasa a ser la rejilla y las columnas se ajustan solas al ancho. */
+.psico-form-grid > .x-autocontainer-outerCt {
+    display: block !important;
+    width: 100% !important;
+}
+
+.psico-form-grid > .x-autocontainer-outerCt > .x-autocontainer-innerCt {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+    column-gap: 16px;
+    row-gap: 6px;
+    width: 100%;
+    height: auto;
+}
+
+.psico-form-grid > .x-autocontainer-outerCt > .x-autocontainer-innerCt > * {
+    min-width: 0;
+    margin: 0 !important;
+}
+
+/* Los campos ocupan toda su celda (anula el ancho natural de 150px del tema) */
+.psico-form-grid > .x-autocontainer-outerCt > .x-autocontainer-innerCt > :not(.psico-fit-content) {
+    width: 100% !important;
+    box-sizing: border-box;
+}
+
+.psico-form-grid .x-form-item-body {
+    min-width: 0 !important;
+    max-width: none !important;
+}
+
+.psico-form-grid .psico-span-full {
+    grid-column: 1 / -1;
+}
+
+/* ---------- Tablet ---------- */
+@media (max-width: 1023px) {
+    .psico-topbar-title {
+        font-size: 12px;
+    }
+}
+
+/* ---------- Móvil ---------- */
+@media (max-width: 767px) {
+    .psico-topbar.x-toolbar {
+        padding: 0 6px;
+    }
+
+    .psico-brand img {
+        height: 30px;
+        margin-right: 8px;
+    }
+
+    .psico-brand img.psico-brand-text {
+        display: none;
+    }
+
+    .psico-topbar .psico-user-btn.x-btn-default-toolbar-small {
+        padding: 4px;
+    }
+
+    .psico-content .x-panel-body.psico-page-body {
+        padding: 10px !important;
+    }
+
+    .psico-form-grid {
+        padding: 10px !important;
+    }
+
+    .psico-form-grid > .x-autocontainer-outerCt > .x-autocontainer-innerCt {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+@media (max-width: 479px) {
+    /* Solo avatar: el nombre sigue disponible como tooltip del menú */
+    .psico-user-name {
+        display: none;
+    }
+
+    .psico-avatar {
+        margin-right: 4px;
+    }
+
+    .psico-topbar-title {
+        font-size: 11px;
+    }
+}
+
+/* ---------- Login ---------- */
+.psico-login-img {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.psico-login-stacked .psico-login-img img {
+    max-height: 200px;
+    width: auto;
+    margin: 0 auto;
 }
